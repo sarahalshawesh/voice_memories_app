@@ -1,20 +1,22 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef} from "react";
 
 export default function Home() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-  async function getMedia() {
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  async function startRecording() {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      streamRef.current = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: false,
       });
 
       setHasPermission(true);
-
-      const recorder = new MediaRecorder(stream);
+      const recorder = new MediaRecorder(streamRef.current);
+      recorderRef.current = recorder;
       const audioChunks: Blob[] = [];
 
       
@@ -33,23 +35,36 @@ export default function Home() {
       setIsRecording(true);
       console.log("Recording started");
 
-      setTimeout(() => {
-        recorder.stop();
-        stream.getTracks().forEach((track) => track.stop());
-      }, 5000);
+     
+
     } catch (err) {
       console.error("Error accessing microphone:", err);
       setHasPermission(false);
     }
   }
 
+  function stopRecording() {
+    if (recorderRef.current) {
+      recorderRef.current.stop();
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+    }
+  }
+
   return (
     <main className="p-8">
       <button
-        onClick={getMedia}
+        onClick={startRecording}
         className="rounded bg-black px-4 py-2 text-white"
       >
-        Test microphone
+        Record
+      </button>
+      <button
+        onClick={stopRecording}
+        className="rounded bg-black px-4 py-2 text-white"
+      >
+        Stop
       </button>
     </main>
   );
