@@ -44,28 +44,27 @@ export default function Home() {
   }
 
   function stopRecording() {
-    if (recorderRef.current) {
-      recorderRef.current.stop();
-    }
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
-    }
+    recorderRef.current?.stop();
+    streamRef.current?.getTracks().forEach((track) => track.stop());
   }
 
   return (
     <main className="p-8">
-      <button
+      {!isRecording ? (
+        <button
         onClick={startRecording}
         className="rounded bg-black px-4 py-2 text-white"
-      >
+        >
         Record
       </button>
-      <button
-        onClick={stopRecording}
-        className="rounded bg-black px-4 py-2 text-white"
-      >
-        Stop
-      </button>
+      ) : (
+        <button
+          onClick={stopRecording}
+          className="rounded bg-black px-4 py-2 text-white"
+        >
+          Stop
+        </button>
+      )}
     </main>
   );
 }
