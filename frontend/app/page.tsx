@@ -5,6 +5,7 @@ export default function Home() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [audioURL, setAudioURL] = useState<string>("");
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   async function startRecording() {
@@ -27,6 +28,7 @@ export default function Home() {
       recorder.onstop = () => {
         const finalBlob = new Blob(audioChunks, { type: recorder.mimeType });
         setAudioBlob(finalBlob);
+        setAudioURL(URL.createObjectURL(finalBlob))
         setIsRecording(false);
         console.log("Recording stopped");
       };
@@ -65,6 +67,8 @@ export default function Home() {
           Stop
         </button>
       )}
+      { audioURL &&  (<audio controls src={audioURL}/>)
+      }
     </main>
   );
 }
