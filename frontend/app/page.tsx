@@ -67,8 +67,8 @@ export default function Home() {
           Stop
         </button>
       )}
-      { audioURL &&  (<audio controls src={audioURL}/>)
-      }
+      { audioURL &&  (<audio controls src={audioURL}/>)}
+      { audioURL && <p>Recording complete, press play to listen</p>}
     </main>
   );
 }
