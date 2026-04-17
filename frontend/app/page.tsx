@@ -65,7 +65,7 @@ export default function Home() {
     formData.append("recording", audioBlob);
       
     try {
-      await fetch("www", {
+      await fetch("http://127.0.0.1:8000/upload", {
         body: formData, 
         method: "POST"});
     } catch (err) {
@@ -95,6 +95,7 @@ export default function Home() {
       {/* If the audio URL has been created, the audio controls and a message appear */}
       { audioURL &&  (<audio controls src={audioURL}/>)}
       { audioURL && <p>Recording complete, press play to listen</p>}
+      { audioBlob && <button onClick ={uploadRecording}>Save</button>}
     </main>
   );
 }

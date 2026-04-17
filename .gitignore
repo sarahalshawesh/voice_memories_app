@@ -137,3 +137,47 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+
+# -----------------------
+# AWS
+# -----------------------
+.aws/
+
+
+# -----------------------
+# PYTHON
+# -----------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+.Python
+venv/
+.env/
+.envrc
+.venv/
+
+pip-log.txt
+pip-delete-this-directory.txt
+
+# -----------------------
+# MAC / OS FILES
+# -----------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------
+# TEST / COVERAGE
+# -----------------------
+coverage/
+.pytest_cache/
+
+
+# -----------------------
+# IDE FILES
+# -----------------------
+.vscode/
+.idea/
+
