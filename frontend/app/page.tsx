@@ -58,6 +58,22 @@ export default function Home() {
     streamRef.current?.getTracks().forEach((track) => track.stop());
   }
 
+  // function that uploads the recording to the backend
+  async function uploadRecording() {
+    if (!audioBlob) return;
+    const formData = new FormData();
+    formData.append("recording", audioBlob);
+      
+    try {
+      await fetch("www", {
+        body: formData, 
+        method: "POST"});
+    } catch (err) {
+      console.error("Error posting audio", err);
+    }
+  }
+  
+
   return (
     <main className="p-8">
       {/* Logic for button switch between Record and Stop */}
