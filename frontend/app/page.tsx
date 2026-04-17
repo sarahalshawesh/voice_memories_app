@@ -8,23 +8,30 @@ export default function Home() {
   const [audioURL, setAudioURL] = useState<string>("");
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+
+  // function that starts the recorder and handles on stop logic.
+  // asynchronous as it waits for a Promise for microphone access
   async function startRecording() {
     try {
+      // asks web browser for permission to access microphone
       streamRef.current = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: false,
       });
 
       setHasPermission(true);
+      // Creates the recorder and an array to collect recorded audio chunks
       const recorder = new MediaRecorder(streamRef.current);
       recorderRef.current = recorder;
       const audioChunks: Blob[] = [];
 
-      
+      // During recording audio chunks are saved as they become available
       recorder.ondataavailable = (event) => { 
         audioChunks.push(event.data);
       };
       
+      // Logic for when the recording stops. Ends recording and resets flag for IsRecording
+      // Audio chunks are combined and an object URL is created for playback
       recorder.onstop = () => {
         const finalBlob = new Blob(audioChunks, { type: recorder.mimeType });
         setAudioBlob(finalBlob);
@@ -38,13 +45,14 @@ export default function Home() {
       console.log("Recording started");
 
      
-
+    // Error handling. Returns microphone permission to false if there's an error.
     } catch (err) {
       console.error("Error accessing microphone:", err);
       setHasPermission(false);
     }
   }
 
+  // function that stops the recorder and streams 
   function stopRecording() {
     recorderRef.current?.stop();
     streamRef.current?.getTracks().forEach((track) => track.stop());
@@ -52,6 +60,7 @@ export default function Home() {
 
   return (
     <main className="p-8">
+      {/* Logic for button switch between Record and Stop */}
       {!isRecording ? (
         <button
         onClick={startRecording}
@@ -67,6 +76,7 @@ export default function Home() {
           Stop
         </button>
       )}
+      {/* If the audio URL has been created, the audio controls and a message appear */}
       { audioURL &&  (<audio controls src={audioURL}/>)}
       { audioURL && <p>Recording complete, press play to listen</p>}
     </main>
