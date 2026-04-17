@@ -13,3 +13,7 @@ async def read_item(item_id: int, q: str | None = None):
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+@app.post("/upload")
+async def save_recording():
+    return {"message": "Recording saved"}
