@@ -6,8 +6,10 @@ export default function Home() {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [audioURL, setAudioURL] = useState<string>("");
+  const [isUploaded, setIsUploaded] = useState<boolean | null>(null)
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+
 
   // function that starts the recorder and handles on stop logic.
   // asynchronous as it waits for a Promise for microphone access
@@ -65,11 +67,19 @@ export default function Home() {
     formData.append("recording", audioBlob);
       
     try {
-      await fetch("http://127.0.0.1:8000/upload", {
+      const res = await fetch("http://127.0.0.1:8000/upload", {
         body: formData, 
         method: "POST"});
+        if (res.ok) {
+          setIsUploaded(true)
+          console.log("Save successful", res.status)
+          const parsedRes = await res.json()
+          console.log(parsedRes)
+        }
+        
     } catch (err) {
       console.error("Error posting audio", err);
+      setIsUploaded(false)
     }
   }
   
@@ -96,6 +106,8 @@ export default function Home() {
       { audioURL &&  (<audio controls src={audioURL}/>)}
       { audioURL && <p>Recording complete, press play to listen</p>}
       { audioBlob && <button onClick ={uploadRecording}>Save</button>}
+      { isUploaded && <p>Recording uploaded</p>}
+
     </main>
   );
 }
