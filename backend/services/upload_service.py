@@ -7,7 +7,7 @@ def save_recording(file):
     # validate upload rules, check extension and content type
     content_type_options = ["audio/webm", "audio/wav", "audio/mpeg"]
     suffix_options = [".mp3", ".wav", ".webm"]
-    file_suffix = Path(file.filename).suffix
+    file_suffix = Path(file.filename).suffix.lower()
     if file.content_type in content_type_options and file_suffix in suffix_options:
         
     # create unique storage name
