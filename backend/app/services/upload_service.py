@@ -3,7 +3,6 @@ from pathlib import Path
 import random
 import string
 
-
 async def save_recording(file):
     file_suffix = Path(file.filename).suffix.lower()
     validate_audio_file(file, file_suffix)
@@ -31,6 +30,7 @@ def create_storage_name(file, file_suffix):
 async def store_file(file, file_storage_name):
     # reads the file and writes it to the chosen folder path
     upload_dir = Path('uploads')
+    upload_dir.mkdir(exist_ok=True)
     filepath = upload_dir / file_storage_name
     audio_content = await file.read()
     with open(filepath, "wb") as output_file:
