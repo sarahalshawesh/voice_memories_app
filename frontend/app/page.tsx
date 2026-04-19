@@ -43,11 +43,14 @@ export default function Home() {
       };
       
       recorder.start();
+      setIsUploaded(false)
+      setAudioBlob(null)
+      setAudioURL("")
       setIsRecording(true);
       console.log("Recording started");
 
      
-    // Error handling. Returns microphone permission to false if there's an error.
+    // Updates permission state to false if there's an error with microphone access.
     } catch (err) {
       console.error("Error accessing microphone:", err);
       setHasPermission(false);
@@ -75,6 +78,9 @@ export default function Home() {
           console.log("Save successful", res.status)
           const parsedRes = await res.json()
           console.log(parsedRes)
+        } else {
+          setIsUploaded(false)
+          console.log("Save failed", res.status)
         }
         
     } catch (err) {
