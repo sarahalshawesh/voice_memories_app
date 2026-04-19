@@ -9,7 +9,7 @@ router = APIRouter(prefix="/upload", tags=["upload"])
 # Creates the function for uploading a recording. Requires a file input.
 async def upload_recording(file: UploadFile = File(...)):
     try: 
-        res = upload_service.save_recording(file)
+        res = await upload_service.save_recording(file)
         return res
 
     except ValueError as err:

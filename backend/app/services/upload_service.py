@@ -1,9 +1,10 @@
+from fastapi import UploadFile
 from pathlib import Path
 import random
 import string
 
 
-def save_recording(file):
+async def save_recording(file):
     file_suffix = Path(file.filename).suffix.lower()
     validate_audio_file(file, file_suffix)
     file_storage_name = create_storage_name(file, file_suffix)
@@ -27,8 +28,11 @@ def create_storage_name(file, file_suffix):
     file_storage_name = f"{stem_filename}-{random_num}{file_suffix}"
     return file_storage_name
 
-def store_file(file, file_storage_name):
-    # read the file
-    # choose folder path
-    # write file in the folder path
-    pass
+async def store_file(file, file_storage_name):
+    # reads the file and writes it to the chosen folder path
+    upload_dir = Path('uploads')
+    filepath = upload_dir / file_storage_name
+    audio_content = await file.read()
+    with open(filepath, "wb") as output_file:
+        output_file.write(audio_content) 
+    
