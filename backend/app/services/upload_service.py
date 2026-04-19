@@ -7,7 +7,7 @@ def save_recording(file):
     file_suffix = Path(file.filename).suffix.lower()
     validate_audio_file(file, file_suffix)
     file_storage_name = create_storage_name(file, file_suffix)
-   
+    store_file(file, file_storage_name)
     # return structured result
     return {"file_storage_name": file_storage_name}
 
@@ -26,3 +26,9 @@ def create_storage_name(file, file_suffix):
     stem_filename = Path(file.filename).stem.strip()
     file_storage_name = f"{stem_filename}-{random_num}{file_suffix}"
     return file_storage_name
+
+def store_file(file, file_storage_name):
+    # read the file
+    # choose folder path
+    # write file in the folder path
+    pass
