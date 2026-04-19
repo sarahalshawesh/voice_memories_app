@@ -66,13 +66,16 @@ export default function Home() {
   // function that uploads the recording to the backend
   async function uploadRecording() {
     if (!audioBlob) return;
+    // Stores the recording audio in a form to be sent to the backend
     const formData = new FormData();
     formData.append("recording", audioBlob);
       
     try {
+      // POST request to send the recording audio form to the backend
       const res = await fetch("http://127.0.0.1:8000/upload", {
         body: formData, 
         method: "POST"});
+        // Log whether the POST request is successful or not and parse the json output
         if (res.ok) {
           setIsUploaded(true)
           console.log("Save successful", res.status)
@@ -108,7 +111,7 @@ export default function Home() {
           Stop
         </button>
       )}
-      {/* If the audio URL has been created, the audio controls and a message appear */}
+      {/* If the audio has been created, the audio controls and messages appear */}
       { audioURL &&  (<audio controls src={audioURL}/>)}
       { audioURL && <p>Recording complete, press play to listen</p>}
       { audioBlob && <button onClick ={uploadRecording}>Save</button>}
