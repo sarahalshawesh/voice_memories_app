@@ -10,6 +10,16 @@ export default function Home() {
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
+  const [personName, setPersonName] = useState<string>("");
+  
+  
+  function saveName() {
+    localStorage.setItem('person_name', personName);
+  }
+  
+  function setName(i) {
+    setPersonName(i.target.value);
+  }
 
   // function that starts the recorder and handles on stop logic.
   // asynchronous as it waits for a Promise for microphone access
@@ -68,11 +78,13 @@ export default function Home() {
     if (!audioBlob) return;
     // Stores the recording audio in a form to be sent to the backend
     const formData = new FormData();
-    formData.append("recording", audioBlob);
-      
+    formData.append("file", audioBlob, "recording.webm");
+    // formData.append("prompt_id", prompt_id)
+    formData.append("person_name", personName)
+
     try {
       // POST request to send the recording audio form to the backend
-      const res = await fetch("http://127.0.0.1:8000/upload", {
+      const res = await fetch("http://127.0.0.1:8000/upload/", {
         body: formData, 
         method: "POST"});
         // Log whether the POST request is successful or not and parse the json output
@@ -95,6 +107,21 @@ export default function Home() {
 
   return (
     <main className="p-8">
+      {/* Input box  for user to add name and button to save it */}
+      <label>Enter your name:
+          <input
+            type="text" 
+            value={personName}
+            onChange={setName}
+          />
+      </label>
+      {personName && <button
+      onClick={saveName}
+      className="rounded bg-black px-4 py-2 text-white"
+      >
+      Save
+      </button>}
+      
       {/* Logic for button switch between Record and Stop */}
       {!isRecording ? (
         <button
