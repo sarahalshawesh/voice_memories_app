@@ -9,15 +9,16 @@ export default function Home() {
   const [isUploaded, setIsUploaded] = useState<boolean | null>(null)
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
-
   const [personName, setPersonName] = useState<string>("");
+  const [isNameStored, setIsNameStored] = useState<boolean | null>(null);
   
   
-  function saveName() {
+  function storeName() {
     localStorage.setItem('person_name', personName);
+    setIsNameStored(true)
   }
   
-  function setName(i) {
+  function saveName(i) {
     setPersonName(i.target.value);
   }
 
@@ -108,19 +109,26 @@ export default function Home() {
   return (
     <main className="p-8">
       {/* Input box  for user to add name and button to save it */}
+      {!isNameStored ? (
+      <div>
       <label>Enter your name:
           <input
             type="text" 
             value={personName}
-            onChange={setName}
-          />
+            onChange={saveName}
+           />
       </label>
-      {personName && <button
-      onClick={saveName}
-      className="rounded bg-black px-4 py-2 text-white"
-      >
-      Save
-      </button>}
+       <button
+        onClick={storeName}
+        className="rounded bg-black px-4 py-2 text-white"
+        >
+       Save
+       </button>
+      </div>
+      ) : (
+      <label> 
+        Hello {personName} 
+        </label>)}
       
       {/* Logic for button switch between Record and Stop */}
       {!isRecording ? (
