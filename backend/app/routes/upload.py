@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Form
 from services import upload_service
 
 
@@ -6,10 +6,10 @@ from services import upload_service
 router = APIRouter(prefix="/upload", tags=["upload"])
 
 @router.post("/")
-# Creates the function for uploading a recording. Requires a file input.
-async def upload_recording(file: UploadFile = File(...)):
+# Creates the function for uploading a recording. Requires a file input. 
+async def upload_recording(file: UploadFile = File(...), person_name: str = Form(...)):
     try: 
-        res = await upload_service.save_recording(file)
+        res = await upload_service.save_recording(file, person_name)
         return res
 
     except ValueError as err:
