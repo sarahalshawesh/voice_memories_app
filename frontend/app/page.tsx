@@ -9,9 +9,9 @@ export default function Home() {
   const [isUploaded, setIsUploaded] = useState<boolean | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  
   const [personName, setPersonName] = useState<string>("");
   const [isNameStored, setIsNameStored] = useState<boolean>(false);
+  const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
   
   // When Home first appears, check if a saved name exists in localStorage and put it into state
   useEffect (() => {
@@ -21,6 +21,10 @@ export default function Home() {
       setIsNameStored(true)
     }
   }, []);
+
+  function changeScreen() {
+    setIsHomeScreen(false)
+  }
 
   // Adds name to localStorage 
   function storeName() {
@@ -119,6 +123,18 @@ export default function Home() {
 
   return (
     <main className="p-8">
+      {isHomeScreen ? (
+      <div>
+      <button
+        onClick={changeScreen}
+        className="rounded bg-black px-4 py-2 text-white"
+        >
+       Prompt
+       </button>
+        
+      </div>
+      ) : ( 
+      <div>
       {/* If there is no name saved in localStorage, an input box for user to add name shows and a save button */}
       {!isNameStored ? (
       <div>
@@ -162,7 +178,8 @@ export default function Home() {
       { audioURL && <p>Recording complete, press play to listen</p>}
       { audioBlob && <button onClick ={uploadRecording}>Save</button>}
       { isUploaded && <p>Recording uploaded</p>}
-
+      </div>
+      )}
     </main>
   );
 }
