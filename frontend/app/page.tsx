@@ -13,6 +13,7 @@ export default function Home() {
   const [personName, setPersonName] = useState<string>("");
   const [isNameStored, setIsNameStored] = useState<boolean>(false);
   
+  // When Home first appears, check if a saved name exists in localStorage and put it into state
   useEffect (() => {
     const storedName = localStorage.getItem("personName");
     if (storedName) {
@@ -21,12 +22,13 @@ export default function Home() {
     }
   }, []);
 
+  // Adds name to localStorage 
   function storeName() {
     localStorage.setItem('personName', personName);
     setIsNameStored(true)
   }
 
-  
+  // When user types into the name bix, it's saved to personName
   function typeName(event: React.ChangeEvent<HTMLInputElement>) {
     setPersonName(event.target.value);
   }
@@ -117,7 +119,7 @@ export default function Home() {
 
   return (
     <main className="p-8">
-      {/* Input box  for user to add name and button to save it */}
+      {/* If there is no name saved in localStorage, an input box for user to add name shows and a save button */}
       {!isNameStored ? (
       <div>
       <label>Enter your name:
