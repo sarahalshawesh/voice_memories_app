@@ -125,59 +125,59 @@ export default function Home() {
     <main className="p-8">
       {isHomeScreen ? (
       <div>
-      <button
-        onClick={changeScreen}
-        className="rounded bg-black px-4 py-2 text-white"
-        >
-       Prompt
-       </button>
-        
-      </div>
-      ) : ( 
-      <div>
-      {/* If there is no name saved in localStorage, an input box for user to add name shows and a save button */}
-      {!isNameStored ? (
-      <div>
-      <label>Enter your name:
-          <input
-            type="text" 
-            value={personName}
-            onChange={typeName}
-           />
-      </label>
-       <button
-        onClick={storeName}
-        className="rounded bg-black px-4 py-2 text-white"
-        >
-       Save
-       </button>
-      </div>
-      ) : (
-      <label> 
-        Hello {personName} 
-        </label>)}
       
-      {/* Logic for button switch between Record and Stop */}
-      {!isRecording ? (
+        {/* If there is no name saved in localStorage, an input box for user to add name shows and a save button */}
+        {!isNameStored ? (
+        <div>
+        <label>Enter your name:
+            <input
+              type="text" 
+              value={personName}
+              onChange={typeName}
+            />
+        </label>
         <button
-        onClick={startRecording}
-        className="rounded bg-black px-4 py-2 text-white"
-        >
-        Record
-      </button>
+          onClick={storeName}
+          className="rounded bg-black px-4 py-2 text-white"
+          >
+          Save
+        </button>
+        </div>
+          ) : (
+        <label> 
+          Hello {personName} 
+          </label>)}
+        <p></p>
+        <button
+          onClick={changeScreen}
+          className="rounded bg-black px-4 py-2 text-white"
+          >
+          Prompt
+        </button>
+      </div>
       ) : (
-        <button
+      <div>
+        {/* Logic for button switch between Record and Stop */}
+        {!isRecording ? (
+          <button
+          onClick={startRecording}
+          className="rounded bg-black px-4 py-2 text-white"
+          >
+          Record
+          </button>
+          ) : (
+          <button
           onClick={stopRecording}
           className="rounded bg-black px-4 py-2 text-white"
-        >
-          Stop
-        </button>
-      )}
-      {/* If the audio has been created, the audio controls and messages appear */}
-      { audioURL &&  (<audio controls src={audioURL}/>)}
-      { audioURL && <p>Recording complete, press play to listen</p>}
-      { audioBlob && <button onClick ={uploadRecording}>Save</button>}
-      { isUploaded && <p>Recording uploaded</p>}
+          >
+            Stop
+          </button>
+        )}
+        {/* If the audio has been created, the audio controls and messages appear */}
+        { audioURL &&  (<audio controls src={audioURL}/>)}
+        { audioURL && <p>Recording complete, press play to listen</p>}
+        { audioBlob && <button onClick ={uploadRecording}>Save</button>}
+        { isUploaded && <p>Recording uploaded</p>}
       </div>
       )}
     </main>
