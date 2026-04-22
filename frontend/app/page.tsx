@@ -1,25 +1,34 @@
 "use client";
-import { useState, useRef} from "react";
+import { useState, useRef, useEffect} from "react";
 
 export default function Home() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [audioURL, setAudioURL] = useState<string>("");
-  const [isUploaded, setIsUploaded] = useState<boolean | null>(null)
+  const [isUploaded, setIsUploaded] = useState<boolean | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  
   const [personName, setPersonName] = useState<string>("");
-  const [isNameStored, setIsNameStored] = useState<boolean | null>(null);
+  const [isNameStored, setIsNameStored] = useState<boolean>(false);
   
-  
+  useEffect (() => {
+    const storedName = localStorage.getItem("personName");
+    if (storedName) {
+      setPersonName(storedName)
+      setIsNameStored(true)
+    }
+  }, []);
+
   function storeName() {
-    localStorage.setItem('person_name', personName);
+    localStorage.setItem('personName', personName);
     setIsNameStored(true)
   }
+
   
-  function saveName(i) {
-    setPersonName(i.target.value);
+  function typeName(event: React.ChangeEvent<HTMLInputElement>) {
+    setPersonName(event.target.value);
   }
 
   // function that starts the recorder and handles on stop logic.
@@ -115,7 +124,7 @@ export default function Home() {
           <input
             type="text" 
             value={personName}
-            onChange={saveName}
+            onChange={typeName}
            />
       </label>
        <button
