@@ -25,11 +25,20 @@ export default function Home() {
     }
   }, []);
 
+
+  // function to go back to the home screen
+  function goBack(){
+    setIsHomeScreen(true)
+    setCurrentPromptId(0)
+  }
+
+  // function to change from home to prompt screen 
   function changeScreen(selectedPromptId: number) {
     setIsHomeScreen(false);
     setCurrentPromptId(selectedPromptId);
   }
 
+  // function that returns the current prompt objects text
   function getPromptText() {
     const currentPrompt = prompts.find((prompt) => prompt.promptId === currentPromptId);
     if (currentPrompt) { 
@@ -177,6 +186,11 @@ export default function Home() {
         /* Prompt screen */ 
       <div>
         {/* Logic for button switch between Record and Stop */}
+        <button
+          onClick={goBack}
+          className="rounded bg-black px-4 py-2 text-white"
+          >Back
+        </button>
         <p>{getPromptText()}</p>
         {!isRecording ? (
           <button
