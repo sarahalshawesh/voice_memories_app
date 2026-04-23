@@ -26,15 +26,22 @@ export default function Home() {
   }, []);
 
   function changeScreen(selectedPromptId: number) {
-    setIsHomeScreen(false)
-    setCurrentPromptId(selectedPromptId)
+    setIsHomeScreen(false);
+    setCurrentPromptId(selectedPromptId);
+  }
+
+  function getPromptText() {
+    const currentPrompt = prompts.find((prompt) => prompt.promptId === currentPromptId);
+    if (currentPrompt) { 
+      return currentPrompt.text
+    }
   }
 
 
   // Adds name to localStorage 
   function storeName() {
     localStorage.setItem('personName', personName);
-    setIsNameStored(true)
+    setIsNameStored(true);
   }
 
   // When user types into the name bix, it's saved to personName
@@ -170,6 +177,7 @@ export default function Home() {
         /* Prompt screen */ 
       <div>
         {/* Logic for button switch between Record and Stop */}
+        <p>{getPromptText()}</p>
         {!isRecording ? (
           <button
           onClick={startRecording}
