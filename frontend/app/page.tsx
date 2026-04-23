@@ -13,7 +13,7 @@ export default function Home() {
   const [isNameStored, setIsNameStored] = useState<boolean>(false);
   const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
 
-  const prompts = ["Where were you when Zain was born?", "Who taught you to ride a bike?", "What's the furthest you've ever swam?", "What was your first job like?"]
+  const prompts = [{promptId: 1, text: "Where were you when Zain was born?"}, {promptId: 2, text: "Who taught you to ride a bike?"}, {promptId: 3, text: "What's the furthest you've ever swam?"}, {promptId: 4, text: "What was your first job like?"}]
   
   // When Home first appears, check if a saved name exists in localStorage and put it into state
   useEffect (() => {
@@ -159,7 +159,7 @@ export default function Home() {
               onClick={changeScreen}  
               className="rounded bg-black px-4 py-2 text-white"
               >
-                {prompt} 
+                {prompt.text} 
             </button>
           </li>)}
         </ul>
