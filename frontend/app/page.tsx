@@ -12,6 +12,8 @@ export default function Home() {
   const [personName, setPersonName] = useState<string>("");
   const [isNameStored, setIsNameStored] = useState<boolean>(false);
   const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
+
+  const prompts = ["Where were you when Zain was born?", "Who taught you to ride a bike?", "What's the furthest you've ever swam?", "What was your first job like?"]
   
   // When Home first appears, check if a saved name exists in localStorage and put it into state
   useEffect (() => {
@@ -25,6 +27,7 @@ export default function Home() {
   function changeScreen() {
     setIsHomeScreen(false)
   }
+
 
   // Adds name to localStorage 
   function storeName() {
@@ -123,6 +126,7 @@ export default function Home() {
 
   return (
     <main className="p-8">
+      {/* Home screen */}
       {isHomeScreen ? (
       <div>
       
@@ -148,14 +152,20 @@ export default function Home() {
           Hello {personName} 
           </label>)}
         <p></p>
-        <button
-          onClick={changeScreen}
-          className="rounded bg-black px-4 py-2 text-white"
-          >
-          Prompt
-        </button>
+        <ul>
+          {prompts.map((prompt, index) => 
+          <li key={index}>
+            <button 
+              onClick={changeScreen}  
+              className="rounded bg-black px-4 py-2 text-white"
+              >
+                {prompt} 
+            </button>
+          </li>)}
+        </ul>
       </div>
       ) : (
+        /* Prompt screen */ 
       <div>
         {/* Logic for button switch between Record and Stop */}
         {!isRecording ? (
