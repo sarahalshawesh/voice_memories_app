@@ -14,7 +14,8 @@ export default function Home() {
   const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
 
   const prompts = [{promptId: 1, text: "Where were you when Zain was born?"}, {promptId: 2, text: "Who taught you to ride a bike?"}, {promptId: 3, text: "What's the furthest you've ever swam?"}, {promptId: 4, text: "What was your first job like?"}]
-  
+
+  const [currentPromptId, setCurrentPromptId] = useState<number>(0);
   // When Home first appears, check if a saved name exists in localStorage and put it into state
   useEffect (() => {
     const storedName = localStorage.getItem("personName");
@@ -24,8 +25,9 @@ export default function Home() {
     }
   }, []);
 
-  function changeScreen() {
+  function changeScreen(selectedPromptId: number) {
     setIsHomeScreen(false)
+    setCurrentPromptId(selectedPromptId)
   }
 
 
@@ -98,8 +100,8 @@ export default function Home() {
     // Stores the recording audio in a form to be sent to the backend
     const formData = new FormData();
     formData.append("file", audioBlob, "recording.webm");
-    // formData.append("prompt_id", prompt_id)
-    formData.append("person_name", personName)
+    formData.append("prompt_id", currentPromptId.toString());
+    formData.append("person_name", personName);
 
     try {
       // POST request to send the recording audio form to the backend
@@ -156,7 +158,7 @@ export default function Home() {
           {prompts.map((prompt, index) => 
           <li key={index}>
             <button 
-              onClick={changeScreen}  
+              onClick={() => changeScreen(prompt.promptId)}  
               className="rounded bg-black px-4 py-2 text-white"
               >
                 {prompt.text} 
