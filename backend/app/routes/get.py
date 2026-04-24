@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Form
-from backend.app.services import get_service
+from services import get_service
 
 router = APIRouter(prefix="/get", tags=["get"])
 
@@ -8,12 +8,6 @@ router = APIRouter(prefix="/get", tags=["get"])
 async def health():
     return {"status": "ok"}
 
-@router.get("/prompts/")
-def get_all_recordings():
-    try:
-        get_service.list_recordings()
-    except ValueError as err:
-        raise HTTPException(status_code=400, detail=str(err))
 
 @router.get("/prompts/{prompt_id}/recordings")
 # Gets all recordings for a specified prompt
@@ -25,7 +19,7 @@ def get_recordings_by_prompt(prompt_id: int = Form(...)):
         raise HTTPException(status_code=400, detail=str(err))
     
 @router.get("/prompts/{prompt_id}/{person_name}")
-def get_persons_recording():
+def get_persons_recording(prompt_id: int = Form(...), person_name: str = Form(...)):
     try:
         get_service.list_recordings_by_prompt(prompt_id, person_name)
 

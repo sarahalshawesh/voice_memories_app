@@ -1,8 +1,5 @@
 
 
-def list_recordings():
-    pass
-
 def list_recordings_by_prompt(prompt_id):
     pass
 

@@ -1,7 +1,7 @@
 from pathlib import Path
-import random
-import string
+import random, string
 from config import UPLOAD_DIR
+from database import recordings
 
 
 async def save_recording(file, person_name, prompt_id):
@@ -9,7 +9,11 @@ async def save_recording(file, person_name, prompt_id):
     person_name_validated = validate_person_name(person_name)
     validate_audio_file(file, file_suffix)
     file_storage_name = create_storage_name(file, file_suffix)
-    await store_file(file, file_storage_name)
+    stored_file = await store_file(file, file_storage_name)
+    storage_ref = stored_file.name
+    file_content_type = file.content_type
+    file_size = storage_ref.stat().st_size
+    recordings.insert_recordings(person_name_validated, prompt_id, file_content_type, file_size, storage_ref)
     # return structured result
     return {"file_storage_name": file_storage_name, "person_name": person_name_validated, "prompt_id": prompt_id}
 
@@ -42,4 +46,4 @@ async def store_file(file, file_storage_name):
     audio_content = await file.read()
     with open(filepath, "wb") as output_file:
         output_file.write(audio_content) 
-    
+    return filepath
