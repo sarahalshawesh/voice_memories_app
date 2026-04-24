@@ -22,6 +22,7 @@ def validate_person_name(person_name):
     stripped_person_name = person_name.strip()
     if stripped_person_name:
         return stripped_person_name
+    raise ValueError("Person name cannot be empty")
     
 
  # Helper function to validate upload rules, check extension and content type
