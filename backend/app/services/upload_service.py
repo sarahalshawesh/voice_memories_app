@@ -12,7 +12,7 @@ async def save_recording(file, person_name, prompt_id):
     stored_file = await store_file(file, file_storage_name)
     storage_ref = stored_file.name
     file_content_type = file.content_type
-    file_size = storage_ref.stat().st_size
+    file_size = stored_file.stat().st_size
     recordings.insert_recordings(person_name_validated, prompt_id, file_content_type, file_size, storage_ref)
     # return structured result
     return {"file_storage_name": file_storage_name, "person_name": person_name_validated, "prompt_id": prompt_id}
