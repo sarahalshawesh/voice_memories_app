@@ -4,14 +4,14 @@ import string
 from config import UPLOAD_DIR
 
 
-async def save_recording(file, person_name):
+async def save_recording(file, person_name, prompt_id):
     file_suffix = Path(file.filename).suffix.lower()
     person_name_validated = validate_person_name(person_name)
     validate_audio_file(file, file_suffix)
     file_storage_name = create_storage_name(file, file_suffix)
     await store_file(file, file_storage_name)
     # return structured result
-    return {"file_storage_name": file_storage_name, "person_name": person_name_validated}
+    return {"file_storage_name": file_storage_name, "person_name": person_name_validated, "prompt_id": prompt_id}
 
 # Helper function that removes whitespace and ensures thee is input
 def validate_person_name(person_name):

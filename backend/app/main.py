@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.upload import router as upload_router
+from backend.app.routes.get import router as get_recordings_router 
+
+
 
 app = FastAPI()
 
@@ -12,12 +15,7 @@ origins = [
 app.add_middleware(CORSMiddleware, allow_origins = origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 app.include_router(upload_router)
+app.include_router(get_recordings_router)
 
-@app.get("/")
-async def read_root(): 
-    return {"Hello": "World"}
 
-@app.get("/health")
-async def health():
-    return {"status": "ok"}
 
