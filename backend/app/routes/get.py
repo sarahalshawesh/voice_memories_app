@@ -11,7 +11,7 @@ async def health():
 
 @router.get("/prompts/{prompt_id}/recordings")
 # Gets all recordings for a specified prompt
-def get_recordings_by_prompt(prompt_id: int = Form(...)):
+def get_recordings_by_prompt(prompt_id: int ):
     try:
         get_service.list_recordings_by_prompt(prompt_id)
 
@@ -19,7 +19,7 @@ def get_recordings_by_prompt(prompt_id: int = Form(...)):
         raise HTTPException(status_code=400, detail=str(err))
     
 @router.get("/prompts/{prompt_id}/{person_name}")
-def get_persons_recording(prompt_id: int = Form(...), person_name: str = Form(...)):
+def get_persons_recording(prompt_id: int, person_name: str):
     try:
         get_service.list_recordings_by_prompt(prompt_id, person_name)
 

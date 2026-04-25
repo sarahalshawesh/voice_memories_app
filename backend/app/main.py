@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.upload import router as upload_router
-from backend.app.routes.get import router as get_recordings_router 
+from routes.get import router as get_recordings_router 
 
 
 
