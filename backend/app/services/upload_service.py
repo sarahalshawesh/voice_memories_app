@@ -13,9 +13,14 @@ async def save_recording(file, person_name, prompt_id):
     storage_ref = stored_file.name
     file_content_type = file.content_type
     file_size = stored_file.stat().st_size
-    recordings.insert_recordings(person_name_validated, prompt_id, file_content_type, file_size, storage_ref)
-    # return structured result
-    return {"file_storage_name": file_storage_name, "person_name": person_name_validated, "prompt_id": prompt_id}
+    
+    insert_res = recordings.insert_recordings(person_name_validated, prompt_id, file_content_type, file_size, storage_ref)
+    if type(insert_res) is Exception:
+        Path.unlink(file)
+    else:
+        recording_id = insert_res.recording_id
+        created_at = insert_res.created_at
+        return {"recording_id": recording_id, "created_at": created_at}
 
 # Helper function that removes whitespace and ensures thee is input
 def validate_person_name(person_name):
