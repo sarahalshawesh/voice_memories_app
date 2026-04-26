@@ -1,6 +1,12 @@
 "use client";
 import { useState, useRef, useEffect} from "react";
 
+type Recording = {
+  recording_id: string
+  person_name: string
+  created_at: string
+}
+
 export default function Home() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -12,7 +18,7 @@ export default function Home() {
   const [personName, setPersonName] = useState<string>("");
   const [isNameStored, setIsNameStored] = useState<boolean>(false);
   const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
-  const [previousRecordings, setPreviousRecordings] = useState<Object[]>([])
+  const [previousRecordings, setPreviousRecordings] = useState<Recording[]>([])
 
   const prompts = [{promptId: 1, text: "Where were you when Zain was born?"}, {promptId: 2, text: "Who taught you to ride a bike?"}, {promptId: 3, text: "What's the furthest you've ever swam?"}, {promptId: 4, text: "What was your first job like?"}]
 
@@ -62,13 +68,15 @@ export default function Home() {
 
   async function getRecordings(){
     // fetch previous recordings from backend and displays them
-    try {
-      const res = await fetch(`http://127.0.0.1:8000/prompts/${currentPromptId}/recordings/`, {
-        method: "GET"});
-      setPreviousRecordings(res);
-    } catch (err) {
-      console.error("Error getting list of recordings", err);
+    if (currentPromptId) {
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/prompts/${currentPromptId}/recordings/`, {
+          method: "GET"});
+        setPreviousRecordings(await res.json());
+      } catch (err) {
+        console.error("Error getting list of recordings", err);
       
+      }
     }
   }
 
@@ -207,7 +215,13 @@ export default function Home() {
         </button>
         <p>{getPromptText()}</p>
         {/*If there are previous recordings, list them (persons name, created at)*/}
-        {!isHomeScreen && displayRecordings}
+        {currentPromptId && 
+        <ul> {previousRecordings.map((recording, index) => 
+          <li key={index}>
+            <p>{recording}</p>
+          </li>)}
+        </ul>}
+
         {!isRecording ? (
           <button
           onClick={startRecording}
