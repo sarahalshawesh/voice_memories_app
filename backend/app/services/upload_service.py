@@ -13,15 +13,15 @@ async def save_recording(file, person_name, prompt_id):
     storage_ref = stored_file.name
     file_content_type = file.content_type
     file_size = stored_file.stat().st_size
-    
-    insert_res = recordings.insert_recording(person_name_validated, prompt_id, file_content_type, file_size, storage_ref)
-    print(insert_res)
-    if type(insert_res) is Exception:
-        stored_file.unlink()
-    else:
+    try:
+        insert_res = recordings.insert_recording(person_name_validated, prompt_id, file_content_type, file_size, storage_ref)
+        print(insert_res)
         recording_id = insert_res.recording_id
         created_at = insert_res.created_at
         return {"recording_id": recording_id, "created_at": created_at}
+    except Exception as e:
+        return f"{e}: DB error inserting recording for {storage_ref}"
+    
 
 # Helper function that removes whitespace and ensures thee is input
 def validate_person_name(person_name):
