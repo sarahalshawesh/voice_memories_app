@@ -29,7 +29,7 @@ export default function Home() {
     async function getRecordings(){
       if (currentPromptId) {
         try {
-          const res = await fetch(`http://127.0.0.1:8000/prompts/${currentPromptId}/recordings/`, {
+          const res = await fetch(`http://127.0.0.1:8000/recordings/${currentPromptId}`, {
             method: "GET"});
             if (res.ok) {
               setPreviousRecordings(await res.json());
@@ -222,10 +222,11 @@ export default function Home() {
         </button>
         <p>{getPromptText()}</p>
         {/*If there are previous recordings, list them (persons name, created at)*/}
-        {currentPromptId && 
-        <ul> {previousRecordings.map((recording, index) => 
-          <li key={index}>
-            <p>{recording}</p>
+        {previousRecordings && 
+        <ul> {previousRecordings.map((recording) => 
+          <li key={recording.recording_id}>
+            <p>{recording.person_name}</p>
+            <p>{recording.created_at}</p>
           </li>)}
         </ul>}
 
