@@ -5,7 +5,7 @@ type Recording = {
   recording_id: string
   person_name: string
   created_at: string
-}
+};
 
 export default function Home() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -18,9 +18,9 @@ export default function Home() {
   const [personName, setPersonName] = useState<string>("");
   const [isNameStored, setIsNameStored] = useState<boolean>(false);
   const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
-  const [previousRecordings, setPreviousRecordings] = useState<Recording[]>([])
+  const [previousRecordings, setPreviousRecordings] = useState<Recording[]>([]);
 
-  const prompts = [{promptId: 1, text: "Where were you when Zain was born?"}, {promptId: 2, text: "Who taught you to ride a bike?"}, {promptId: 3, text: "What's the furthest you've ever swam?"}, {promptId: 4, text: "What was your first job like?"}]
+  const prompts = [{promptId: 1, text: "Where were you when Zain was born?"}, {promptId: 2, text: "Who taught you to ride a bike?"}, {promptId: 3, text: "What's the furthest you've ever swam?"}, {promptId: 4, text: "What was your first job like?"}];
 
   const [currentPromptId, setCurrentPromptId] = useState<number>(0);
 
@@ -31,7 +31,9 @@ export default function Home() {
         try {
           const res = await fetch(`http://127.0.0.1:8000/prompts/${currentPromptId}/recordings/`, {
             method: "GET"});
-          setPreviousRecordings(await res.json());
+            if (res.ok) {
+              setPreviousRecordings(await res.json());
+            }
         } catch (err) {
           console.error("Error getting list of recordings", err);
       
@@ -45,23 +47,23 @@ export default function Home() {
   useEffect (() => {
     const storedName = localStorage.getItem("personName");
     if (storedName) {
-      setPersonName(storedName)
-      setIsNameStored(true)
+      setPersonName(storedName);
+      setIsNameStored(true);
     }
   }, []);
 
 
   // function to go back to the home screen
   function goBack(){
-    setIsHomeScreen(true)
-    setCurrentPromptId(0)
+    setIsHomeScreen(true);
+    setCurrentPromptId(0);
   }
 
   // function to change from home to prompt screen 
   function changeScreen(selectedPromptId: number) {
     setIsHomeScreen(false);
     setCurrentPromptId(selectedPromptId);
-  }
+  };
 
   // function that returns the current prompt objects text
   function getPromptText() {
@@ -69,19 +71,19 @@ export default function Home() {
     if (currentPrompt) { 
       return currentPrompt.text
     }
-  }
+  };
 
 
   // Adds name to localStorage 
   function storeName() {
     localStorage.setItem('personName', personName);
     setIsNameStored(true);
-  }
+  };
 
   // When user types into the name bix, it's saved to personName
   function typeName(event: React.ChangeEvent<HTMLInputElement>) {
     setPersonName(event.target.value);
-  }
+  };
 
 
 
@@ -129,13 +131,13 @@ export default function Home() {
       console.error("Error accessing microphone:", err);
       setHasPermission(false);
     }
-  }
+  };
 
   // function that stops the recorder and streams 
   function stopRecording() {
     recorderRef.current?.stop();
     streamRef.current?.getTracks().forEach((track) => track.stop());
-  }
+  };
 
   // function that uploads the recording to the backend
   async function uploadRecording() {
@@ -153,20 +155,20 @@ export default function Home() {
         method: "POST"});
         // Log whether the POST request is successful or not and parse the json output
         if (res.ok) {
-          setIsUploaded(true)
-          console.log("Save successful", res.status)
-          const parsedRes = await res.json()
-          console.log(parsedRes)
+          setIsUploaded(true);
+          console.log("Save successful", res.status);
+          const parsedRes = await res.json();
+          console.log(parsedRes);
         } else {
-          setIsUploaded(false)
-          console.log("Save failed", res.status)
+          setIsUploaded(false);
+          console.log("Save failed", res.status);
         }
         
     } catch (err) {
       console.error("Error posting audio", err);
-      setIsUploaded(false)
+      setIsUploaded(false);
     }
-  }
+  };
   
 
   return (
