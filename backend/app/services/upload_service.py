@@ -14,9 +14,10 @@ async def save_recording(file, person_name, prompt_id):
     file_content_type = file.content_type
     file_size = stored_file.stat().st_size
     
-    insert_res = recordings.insert_recordings(person_name_validated, prompt_id, file_content_type, file_size, storage_ref)
+    insert_res = recordings.insert_recording(person_name_validated, prompt_id, file_content_type, file_size, storage_ref)
+    print(insert_res)
     if type(insert_res) is Exception:
-        Path.unlink(file)
+        stored_file.unlink()
     else:
         recording_id = insert_res.recording_id
         created_at = insert_res.created_at
