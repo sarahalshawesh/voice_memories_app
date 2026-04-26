@@ -12,9 +12,9 @@ def select_prompts_recordings(prompt_id):
     try:
         conn = connect()
         cur = conn.cursor()
-        cur.execute(sql, prompt_id)
+        cur.execute(sql, (prompt_id, ))
         res = cur.fetchall()
-
+        
         return res
     
     except (Exception, psycopg2.DatabaseError) as error:
