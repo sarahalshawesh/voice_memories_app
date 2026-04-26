@@ -22,14 +22,17 @@ def insert_recording(person_name_validated, prompt_id, file_content_type, file_s
         
     
         conn.commit()
-        return {"recording_id": res[0], "created_at": res[1]}
+        if res:
+            return {"recording_id": res[0], "created_at": res[1]}
     
     except (Exception, psycopg2.DatabaseError) as error:
-        conn.rollback()
+        if conn:
+            conn.rollback()
         raise error
 
     finally:
-        if conn:
-            conn.close()
         if cur:
             cur.close()
+        if conn:
+            conn.close()
+        
