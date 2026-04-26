@@ -19,6 +19,7 @@ export default function Home() {
   const [isNameStored, setIsNameStored] = useState<boolean>(false);
   const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
   const [previousRecordings, setPreviousRecordings] = useState<Recording[]>([]);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
 
   const prompts = [{promptId: 1, text: "Where were you when Zain was born?"}, {promptId: 2, text: "Who taught you to ride a bike?"}, {promptId: 3, text: "What's the furthest you've ever swam?"}, {promptId: 4, text: "What was your first job like?"}];
 
@@ -43,6 +44,11 @@ export default function Home() {
     getRecordings()
   }, [currentPromptId]);
 
+  // Only show user greeting once client hydration
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
   // When Home first appears, check if a saved name exists in localStorage and put it into state
   useEffect (() => {
     const storedName = localStorage.getItem("personName");
@@ -52,7 +58,8 @@ export default function Home() {
     }
   }, []);
 
-
+  if (!isMounted) return null;
+  
   // function to go back to the home screen
   function goBack(){
     setIsHomeScreen(true);
