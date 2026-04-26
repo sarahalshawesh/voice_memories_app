@@ -12,10 +12,12 @@ export default function Home() {
   const [personName, setPersonName] = useState<string>("");
   const [isNameStored, setIsNameStored] = useState<boolean>(false);
   const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
+  const [previousRecordings, setPreviousRecordings] = useState<Object[]>([])
 
   const prompts = [{promptId: 1, text: "Where were you when Zain was born?"}, {promptId: 2, text: "Who taught you to ride a bike?"}, {promptId: 3, text: "What's the furthest you've ever swam?"}, {promptId: 4, text: "What was your first job like?"}]
 
   const [currentPromptId, setCurrentPromptId] = useState<number>(0);
+
   // When Home first appears, check if a saved name exists in localStorage and put it into state
   useEffect (() => {
     const storedName = localStorage.getItem("personName");
@@ -56,6 +58,18 @@ export default function Home() {
   // When user types into the name bix, it's saved to personName
   function typeName(event: React.ChangeEvent<HTMLInputElement>) {
     setPersonName(event.target.value);
+  }
+
+  async function getRecordings(){
+    // fetch previous recordings from backend and displays them
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/prompts/${currentPromptId}/recordings/`, {
+        method: "GET"});
+      setPreviousRecordings(res);
+    } catch (err) {
+      console.error("Error getting list of recordings", err);
+      
+    }
   }
 
   // function that starts the recorder and handles on stop logic.
@@ -192,6 +206,8 @@ export default function Home() {
           >Back
         </button>
         <p>{getPromptText()}</p>
+        {/*If there are previous recordings, list them (persons name, created at)*/}
+        {!isHomeScreen && displayRecordings}
         {!isRecording ? (
           <button
           onClick={startRecording}
