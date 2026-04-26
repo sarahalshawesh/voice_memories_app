@@ -24,6 +24,23 @@ export default function Home() {
 
   const [currentPromptId, setCurrentPromptId] = useState<number>(0);
 
+// fetches previous recordings from backend
+  useEffect (() => {
+    async function getRecordings(){
+      if (currentPromptId) {
+        try {
+          const res = await fetch(`http://127.0.0.1:8000/prompts/${currentPromptId}/recordings/`, {
+            method: "GET"});
+          setPreviousRecordings(await res.json());
+        } catch (err) {
+          console.error("Error getting list of recordings", err);
+      
+        }
+      }
+    }
+    getRecordings()
+  }, [currentPromptId]);
+
   // When Home first appears, check if a saved name exists in localStorage and put it into state
   useEffect (() => {
     const storedName = localStorage.getItem("personName");
@@ -66,19 +83,7 @@ export default function Home() {
     setPersonName(event.target.value);
   }
 
-  async function getRecordings(){
-    // fetch previous recordings from backend and displays them
-    if (currentPromptId) {
-      try {
-        const res = await fetch(`http://127.0.0.1:8000/prompts/${currentPromptId}/recordings/`, {
-          method: "GET"});
-        setPreviousRecordings(await res.json());
-      } catch (err) {
-        console.error("Error getting list of recordings", err);
-      
-      }
-    }
-  }
+
 
   // function that starts the recorder and handles on stop logic.
   // asynchronous as it waits for a Promise for microphone access
