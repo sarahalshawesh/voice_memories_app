@@ -1,8 +1,32 @@
 import psycopg2
 from config import DB_CONNECTION_STRING
 
+
+
 def connect():
     return psycopg2.connect(DB_CONNECTION_STRING)
+
+def select_prompts_recordings(prompt_id):
+    conn, cur = None, None
+    sql = "SELECT recording_id, person_name, created_at FROM recordings WHERE prompt_id = %s"
+    try:
+        conn = connect()
+        cur = conn.cursor()
+        cur.execute(sql, prompt_id)
+        res = cur.fetchall()
+
+        return res
+    
+    except (Exception, psycopg2.DatabaseError) as error:
+        if conn:
+            conn.rollback()
+        raise error
+
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
 
 
 def insert_recording(person_name_validated, prompt_id, file_content_type, file_size, storage_ref):
@@ -18,9 +42,6 @@ def insert_recording(person_name_validated, prompt_id, file_content_type, file_s
         cur = conn.cursor()
         cur.execute(sql, values)
         res = cur.fetchone()
-        
-        
-    
         conn.commit()
         if res:
             return {"recording_id": res[0], "created_at": res[1]}
