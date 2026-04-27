@@ -8,7 +8,7 @@ def connect():
 
 def select_prompts_recordings(prompt_id):
     conn, cur = None, None
-    sql = "SELECT recording_id, person_name, created_at FROM recordings WHERE prompt_id = %s"
+    sql = "SELECT recording_id, person_name, created_at, storage_ref FROM recordings WHERE prompt_id = %s"
     try:
         conn = connect()
         print("postgres connection opened")
