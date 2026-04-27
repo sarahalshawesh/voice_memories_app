@@ -2,8 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.upload import router as upload_router
 from routes.get import router as get_recordings_router 
-
-
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
@@ -15,6 +14,8 @@ origins = [
     "http://localhost:8000"
 ]
 app.add_middleware(CORSMiddleware, allow_origins = origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+
+app.mount("/static", StaticFiles(directory="backend/uploads"), name="static")
 
 app.include_router(upload_router)
 app.include_router(get_recordings_router)

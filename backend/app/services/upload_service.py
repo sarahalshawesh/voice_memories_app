@@ -11,6 +11,7 @@ async def save_recording(file, person_name, prompt_id):
     file_storage_name = create_storage_name(file, file_suffix)
     stored_file = await store_file(file, file_storage_name)
     storage_ref = stored_file.name
+    print(storage_ref)
     file_content_type = file.content_type
     file_size = stored_file.stat().st_size
     try:

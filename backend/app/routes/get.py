@@ -1,14 +1,11 @@
 from fastapi import APIRouter, HTTPException, Form
 from services import get_service
-import datetime
 
 router = APIRouter(tags=["get"])
-
 
 @router.get("/health")
 async def health():
     return {"status": "ok"}
-
 
 @router.get("/recordings/{prompt_id}")
 # Gets all recordings for a specified prompt
