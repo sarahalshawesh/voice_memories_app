@@ -5,6 +5,7 @@ type Recording = {
   recording_id: string
   person_name: string
   created_at: string
+  audio_url: string
 };
 
 export default function Home() {
@@ -24,6 +25,9 @@ export default function Home() {
   const prompts = [{promptId: 1, text: "Where were you when Zain was born?"}, {promptId: 2, text: "Who taught you to ride a bike?"}, {promptId: 3, text: "What's the furthest you've ever swam?"}, {promptId: 4, text: "What was your first job like?"}];
 
   const [currentPromptId, setCurrentPromptId] = useState<number>(0);
+  const [refreshRecordings, setRefreshRecordings] = useState<number>(0);
+
+
 
 // fetches previous recordings from backend
   useEffect (() => {
@@ -42,7 +46,7 @@ export default function Home() {
       }
     }
     getRecordings()
-  }, [currentPromptId]);
+  }, [currentPromptId, refreshRecordings]);
 
   // Only show user greeting once client hydration
   useEffect(() => {
@@ -59,7 +63,7 @@ export default function Home() {
   }, []);
 
   if (!isMounted) return null;
-  
+
   // function to go back to the home screen
   function goBack(){
     setIsHomeScreen(true);
@@ -166,6 +170,7 @@ export default function Home() {
           console.log("Save successful", res.status);
           const parsedRes = await res.json();
           console.log(parsedRes);
+          setRefreshRecordings(currentCount => currentCount + 1);
         } else {
           setIsUploaded(false);
           console.log("Save failed", res.status);
@@ -234,6 +239,7 @@ export default function Home() {
           <li key={recording.recording_id}>
             <p>{recording.person_name}</p>
             <p>{recording.created_at}</p>
+            <button>{recording.audio_url}</button>
           </li>)}
         </ul>}
 
