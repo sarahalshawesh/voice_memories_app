@@ -5,8 +5,8 @@ type Recording = {
   recording_id: string
   person_name: string
   created_at: string
-  audio_url: string
-};
+  storage_ref: string
+}; 
 
 export default function Home() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -22,11 +22,17 @@ export default function Home() {
   const [previousRecordings, setPreviousRecordings] = useState<Recording[]>([]);
   const [isMounted, setIsMounted] = useState<boolean>(false);
 
+
   const prompts = [{promptId: 1, text: "Where were you when Zain was born?"}, {promptId: 2, text: "Who taught you to ride a bike?"}, {promptId: 3, text: "What's the furthest you've ever swam?"}, {promptId: 4, text: "What was your first job like?"}];
 
   const [currentPromptId, setCurrentPromptId] = useState<number>(0);
   const [refreshRecordings, setRefreshRecordings] = useState<number>(0);
+  const [currentAudioURL, setCurrentAudioURL] = useState<string | null>(null);
 
+
+  function playClickedRecording(storageRef: string) {
+    setCurrentAudioURL("http://127.0.0.1:8000/static" + storageRef);
+  }
 
 
 // fetches previous recordings from backend
@@ -239,7 +245,10 @@ export default function Home() {
           <li key={recording.recording_id}>
             <p>{recording.person_name}</p>
             <p>{recording.created_at}</p>
-            <button>{recording.audio_url}</button>
+            <button
+            onClick={() => playClickedRecording(recording.storage_ref)}
+            className="rounded bg-black px-4 py-2 text-white"
+            ><audio controls src={currentAudioURL} /></button>
           </li>)}
         </ul>}
 
@@ -268,3 +277,4 @@ export default function Home() {
     </main>
   );
 }
+
