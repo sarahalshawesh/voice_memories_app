@@ -8,6 +8,8 @@ type Recording = {
   storage_ref: string
 }; 
 
+const prompts = [{promptId: 1, text: "Where were you when Zain was born?"}, {promptId: 2, text: "Who taught you to ride a bike?"}, {promptId: 3, text: "What's the furthest you've ever swam?"}, {promptId: 4, text: "What was your first job like?"}];
+
 export default function Home() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -21,17 +23,14 @@ export default function Home() {
   const [isHomeScreen, setIsHomeScreen] = useState<boolean>(true);
   const [previousRecordings, setPreviousRecordings] = useState<Recording[]>([]);
   const [isMounted, setIsMounted] = useState<boolean>(false);
-
-
-  const prompts = [{promptId: 1, text: "Where were you when Zain was born?"}, {promptId: 2, text: "Who taught you to ride a bike?"}, {promptId: 3, text: "What's the furthest you've ever swam?"}, {promptId: 4, text: "What was your first job like?"}];
-
   const [currentPromptId, setCurrentPromptId] = useState<number>(0);
   const [refreshRecordings, setRefreshRecordings] = useState<number>(0);
   const [currentAudioURL, setCurrentAudioURL] = useState<string | null>(null);
+  const [currentAudioID, setCurrentAudioID] = useState<string | null>(null);
 
-
-  function playClickedRecording(storageRef: string) {
+  function playClickedRecording(storageRef: string, recording_id: string) {
     setCurrentAudioURL("http://127.0.0.1:8000/static/" + storageRef);
+    setCurrentAudioID(recording_id)
   }
 
 
@@ -246,12 +245,14 @@ export default function Home() {
             <p>{recording.person_name}</p>
             <p>{recording.created_at}</p>
             <button
-            onClick={() => playClickedRecording(recording.storage_ref)}
+            onClick={() => playClickedRecording(recording.storage_ref, recording.recording_id)}
             className="rounded bg-black px-4 py-2 text-white"
-            >Play</button> 
+            >Play</button>
+            
+            {currentAudioID === recording.recording_id && currentAudioURL && 
+            (<audio controls src={currentAudioURL} />)}
           </li>)}
         </ul>}
-        {currentAudioURL && (<audio controls src={currentAudioURL}/>)}
 
 
         {!isRecording ? (
