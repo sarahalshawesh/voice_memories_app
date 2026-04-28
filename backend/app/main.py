@@ -15,7 +15,7 @@ origins = [
 ]
 app.add_middleware(CORSMiddleware, allow_origins = origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
-app.mount("/static", StaticFiles(directory="backend/uploads"), name="static")
+app.mount("/static", StaticFiles(directory="../uploads"), name="static")
 
 app.include_router(upload_router)
 app.include_router(get_recordings_router)

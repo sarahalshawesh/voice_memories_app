@@ -16,11 +16,5 @@ def get_recordings_by_prompt(prompt_id: int ):
     except ValueError as err:
         raise HTTPException(status_code=400, detail=str(err))
     
-@router.get("/prompts/{prompt_id}/{person_name}")
-def get_persons_recording(prompt_id: int, person_name: str):
-    try:
-        return get_service.list_recordings_by_prompt(prompt_id, person_name)
 
-    except ValueError as err:
-        raise HTTPException(status_code=400, detail=str(err))
 
