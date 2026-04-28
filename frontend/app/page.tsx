@@ -31,7 +31,7 @@ export default function Home() {
 
 
   function playClickedRecording(storageRef: string) {
-    setCurrentAudioURL("http://127.0.0.1:8000/static" + storageRef);
+    setCurrentAudioURL("http://127.0.0.1:8000/static/" + storageRef);
   }
 
 
@@ -248,9 +248,11 @@ export default function Home() {
             <button
             onClick={() => playClickedRecording(recording.storage_ref)}
             className="rounded bg-black px-4 py-2 text-white"
-            ><audio controls src={currentAudioURL} /></button>
+            >Play</button> 
           </li>)}
         </ul>}
+        {currentAudioURL && (<audio controls src={currentAudioURL}/>)}
+
 
         {!isRecording ? (
           <button
@@ -267,7 +269,7 @@ export default function Home() {
             Stop
           </button>
         )}
-        {/* If the audio has been created, the audio controls and messages appear */}
+        {/* If the audio has been created, the audio controls and messages appear */} 
         { audioURL &&  (<audio controls src={audioURL}/>)}
         { audioURL && <p>Recording complete, press play to listen</p>}
         { audioBlob && <button onClick ={uploadRecording}>Save</button>}
