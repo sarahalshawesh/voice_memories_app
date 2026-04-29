@@ -18,6 +18,7 @@ origins = [
 app.add_middleware(CORSMiddleware, allow_origins = origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 upload_dir = Path(__file__).resolve().parents[1] / "uploads"
+upload_dir.mkdir(parents=True, exist_ok=True)
 app.mount("/static", StaticFiles(directory=upload_dir), name="static")
 
 app.include_router(upload_router)
