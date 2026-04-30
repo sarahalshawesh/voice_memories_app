@@ -1,6 +1,8 @@
 "use client";
 import { useState, useRef, useEffect} from "react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL
+
 type Recording = {
   recording_id: string
   person_name: string
@@ -29,7 +31,7 @@ export default function Home() {
   const [currentAudioID, setCurrentAudioID] = useState<string | null>(null);
 
   function playClickedRecording(storageRef: string, recording_id: string) {
-    setCurrentAudioURL("http://127.0.0.1:8000/static/" + storageRef);
+    setCurrentAudioURL(`${API_URL}/static/` + storageRef);
     setCurrentAudioID(recording_id)
   }
 
@@ -39,7 +41,7 @@ export default function Home() {
     async function getRecordings(){
       if (currentPromptId) {
         try {
-          const res = await fetch(`http://127.0.0.1:8000/recordings/${currentPromptId}`, {
+          const res = await fetch(`${API_URL}/recordings/${currentPromptId}`, {
             method: "GET"});
             if (res.ok) {
               setPreviousRecordings(await res.json());
@@ -166,7 +168,7 @@ export default function Home() {
 
     try {
       // POST request to send the recording audio form to the backend
-      const res = await fetch("http://127.0.0.1:8000/upload/", {
+      const res = await fetch(`${API_URL}/upload/`, {
         body: formData, 
         method: "POST"});
         // Log whether the POST request is successful or not and parse the json output
