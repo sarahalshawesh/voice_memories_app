@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Form
-from services import get_service
+from app.services import get_service
 
 router = APIRouter(tags=["get"])
 

@@ -1,4 +1,4 @@
-from database import recordings
+from app.database import recordings
 
 def list_recordings_by_prompt(prompt_id):
     db_res = recordings.select_prompts_recordings(prompt_id)

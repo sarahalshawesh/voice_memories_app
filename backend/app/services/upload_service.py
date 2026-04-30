@@ -1,7 +1,7 @@
 from pathlib import Path
 import random, string
-from config import UPLOAD_DIR
-from database import recordings
+from app.config import UPLOAD_DIR
+from app.database import recordings
 
 
 async def save_recording(file, person_name, prompt_id):

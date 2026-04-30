@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, Form
-from services import upload_service
+from app.services import upload_service
 
 
 # Creates the router with a prefix so all routes begin with upload
