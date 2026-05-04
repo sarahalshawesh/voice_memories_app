@@ -29,6 +29,7 @@ export default function Home() {
   const [refreshRecordings, setRefreshRecordings] = useState<number>(0);
   const [currentAudioURL, setCurrentAudioURL] = useState<string | null>(null);
   const [currentAudioID, setCurrentAudioID] = useState<string | null>(null);
+  const [isSaved, setIsSaved] = useState<boolean | null>(null);
 
   function playClickedRecording(storageRef: string, recording_id: string) {
     setCurrentAudioURL(`${API_URL}/static/` + storageRef);
@@ -175,12 +176,14 @@ export default function Home() {
         if (res.ok) {
           setIsUploaded(true);
           console.log("Save successful", res.status);
+          setIsSaved(true);
           const parsedRes = await res.json();
           console.log(parsedRes);
           setRefreshRecordings(currentCount => currentCount + 1);
         } else {
           setIsUploaded(false);
           console.log("Save failed", res.status);
+          setIsSaved(false);
         }
         
     } catch (err) {
@@ -276,6 +279,8 @@ export default function Home() {
         { audioURL &&  (<audio controls src={audioURL}/>)}
         { audioURL && <p>Recording complete, press play to listen</p>}
         { audioBlob && <button onClick ={uploadRecording}>Save</button>}
+        { isSaved && <p>Save successful</p>}
+        { !isSaved && <p>Save failed</p>}
         { isUploaded && <p>Recording uploaded</p>}
       </div>
       )}
