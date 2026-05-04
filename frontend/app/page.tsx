@@ -280,7 +280,7 @@ export default function Home() {
         { audioURL && <p>Recording complete, press play to listen</p>}
         { audioBlob && <button onClick ={uploadRecording}>Save</button>}
         { isSaved && <p>Save successful</p>}
-        { !isSaved && <p>Save failed</p>}
+        { isSaved == false && <p>Save failed</p>}
         { isUploaded && <p>Recording uploaded</p>}
       </div>
       )}
