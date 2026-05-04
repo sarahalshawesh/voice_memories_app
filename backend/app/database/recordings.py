@@ -2,7 +2,6 @@ import psycopg2
 from config import DB_CONNECTION_STRING
 
 
-
 def connect():
     return psycopg2.connect(DB_CONNECTION_STRING)
 
