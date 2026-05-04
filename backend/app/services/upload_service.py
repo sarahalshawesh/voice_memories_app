@@ -1,6 +1,6 @@
 from pathlib import Path
 import random, string
-from app.main import upload_dir
+from app.config import UPLOAD_DIR
 from app.database import recordings
 
 
@@ -49,8 +49,7 @@ def create_storage_name(file, file_suffix):
 
 async def store_file(file, file_storage_name):
     # reads the file and writes it to the chosen folder path
-    upload_dir.mkdir(exist_ok=True)
-    filepath = upload_dir / file_storage_name
+    filepath = UPLOAD_DIR / file_storage_name
     audio_content = await file.read()
     with open(filepath, "wb") as output_file:
         output_file.write(audio_content) 

@@ -4,6 +4,7 @@ from app.routes.upload import router as upload_router
 from app.routes.get import router as get_recordings_router 
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
+from app.config import UPLOAD_DIR
 
 
 app = FastAPI()
@@ -18,9 +19,8 @@ origins = [
 ]
 app.add_middleware(CORSMiddleware, allow_origins = origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
-upload_dir = Path(__file__).resolve().parents[1] / "uploads"
-upload_dir.mkdir(parents=True, exist_ok=True)
-app.mount("/static", StaticFiles(directory=upload_dir), name="static")
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/static", StaticFiles(directory=UPLOAD_DIR), name="static")
 
 app.include_router(upload_router)
 app.include_router(get_recordings_router)
