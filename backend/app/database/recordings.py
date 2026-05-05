@@ -62,3 +62,26 @@ def insert_recording(person_name_validated, prompt_id, file_content_type, file_s
             conn.close()
             print("postgres connection closed")
         
+def delete_recording_in_db(recording_id):
+    conn, cur = None, None
+    sql = "DELETE FROM recordings WHERE recording_id = %s" 
+   
+    try:
+        conn = connect()
+        print("postgres connection opened")
+        cur = conn.cursor()
+        cur.execute(sql, recording_id)
+        conn.commit()
+    
+    except (Exception, psycopg2.DatabaseError) as error:
+        if conn:
+            conn.rollback()
+        raise error
+
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+            print("postgres connection closed")
+        
