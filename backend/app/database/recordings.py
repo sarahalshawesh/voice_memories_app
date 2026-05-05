@@ -64,14 +64,17 @@ def insert_recording(person_name_validated, prompt_id, file_content_type, file_s
         
 def delete_recording_in_db(recording_id):
     conn, cur = None, None
-    sql = "DELETE FROM recordings WHERE recording_id = %s" 
+    sql = "DELETE FROM recordings WHERE recording_id = %s RETURNING storage_ref" 
    
     try:
         conn = connect()
         print("postgres connection opened")
         cur = conn.cursor()
-        cur.execute(sql, recording_id)
+        cur.execute(sql, (recording_id, ))
+        res = cur.fetchone()
+
         conn.commit()
+        return res[0]
     
     except (Exception, psycopg2.DatabaseError) as error:
         if conn:
