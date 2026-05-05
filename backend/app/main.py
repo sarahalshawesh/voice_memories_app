@@ -25,6 +25,7 @@ app.mount("/static", StaticFiles(directory=UPLOAD_DIR), name="static")
 
 app.include_router(upload_router)
 app.include_router(get_recordings_router)
+app.include_router(delete_router)
 
 
 
